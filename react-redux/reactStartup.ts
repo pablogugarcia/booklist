@@ -6,10 +6,13 @@ import ajaxUtil from 'util/ajaxUtil';
 import 'react-loadable';
 import 'immutability-helper';
 
+import './blogPost';
+
+
 import {setDesktop, setMobile, setModule, setLoggedIn, setPublicInfo, setRequestDesktop, setIsTouch} from './applicationRoot/rootReducerActionCreators';
 import 'util/ajaxUtil';
 
-import createHistory from 'history/createBrowserHistory'
+import createHistory from 'history/createBrowserHistory';
 
 (function() {
     if('serviceWorker' in navigator && !/localhost/.test(window.location as any)) {
