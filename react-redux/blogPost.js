@@ -21,6 +21,16 @@ const rootReducer = (state = rootReducerInitialState, action) => {
 
 const store = createStoreWithMiddleware(combineReducers({app: rootReducer}));
 
+const asyncReducers = {};
+const getNewReducer = newModuleInfo => {
+    asyncReducers[newModuleInfo.name] = newModuleInfo.reducer;
+    
+    store.replaceReducer(combineReducers({
+        app: rootReducer,
+        ...asyncReducers
+    }));
+}
+
 debugger;
 console.log(store.getState());
 store.dispatch({type: 'INC_A'})
@@ -48,10 +58,7 @@ const splitReducerA = (state = codeSplitA, action) => {
 }
 //-------------------------------------------------------
 
-store.replaceReducer(combineReducers({
-    app: rootReducer,
-    aModule: splitReducerA
-}));
+getNewReducer({name: 'aModule', reducer: splitReducerA});
 
 
 debugger;
@@ -79,11 +86,8 @@ const splitReducerB = (state = codeSplitB, action) => {
 }
 //-------------------------------------------------------
 
-store.replaceReducer(combineReducers({
-    app: rootReducer,
-    aModule: splitReducerA,
-    bModule: splitReducerB
-}));
+getNewReducer({name: 'bModule', reducer: splitReducerB});
+
 
 
 debugger;
