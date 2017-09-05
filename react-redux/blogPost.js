@@ -1,10 +1,6 @@
 import thunkMiddleware from 'redux-thunk';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 
-const createStoreWithMiddleware = applyMiddleware(
-    thunkMiddleware
-)(createStore);
-
 const rootReducerInitialState = {
     rootA: 1,
     rootB: 1
@@ -19,16 +15,33 @@ const rootReducer = (state = rootReducerInitialState, action) => {
     return state;
 }
 
-const store = createStoreWithMiddleware(combineReducers({app: rootReducer}));
 
+const combineLazyReducers = (reducers, initialState) => {
+    let reducerKeys = new Set(Object.keys(reducers));
+    Object.keys(initialState)
+          .filter(k => !reducerKeys.has(k))
+          .forEach(k => {
+              reducers[k] = state => state === undefined ? null : state
+          });
+
+    return combineReducers(reducers);
+}
+
+const storeInitialState = {
+    app: { rootA: 10, rootB: 12 },
+    aModule: { aValue: 'saved A value' },
+    bModule: { bValue: 'saved B value' },
+}
+const store = createStore(combineLazyReducers({app: rootReducer}, storeInitialState), storeInitialState);
 const asyncReducers = {};
+
 const getNewReducer = newModuleInfo => {
     asyncReducers[newModuleInfo.name] = newModuleInfo.reducer;
     
-    store.replaceReducer(combineReducers({
+    store.replaceReducer(combineLazyReducers({
         app: rootReducer,
         ...asyncReducers
-    }));
+    }, store.getState()));
 }
 
 debugger;
