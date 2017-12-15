@@ -1,14 +1,13 @@
-import Book from './Book/resolver';
-
-const { Query: BookQuery, Mutation: BookMutation, ...BookRest } = Book;
+import Book from "./Book/resolver";
 
 export default {
-Query: Object.assign({},
-BookQuery
-),
-Mutation: Object.assign({},
-BookMutation
-),
-...BookRest
+  Query: {
+    async allBooks(root, args, context, ast) {
+      let db = await root.db;
+      return await db
+        .collection("books")
+        .find({})
+        .toArray();
+    }
+  }
 };
-

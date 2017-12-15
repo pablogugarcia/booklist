@@ -1,34 +1,19 @@
-import { query as BookQuery, mutation as BookMutation, type as BookType } from './Book/schema';
-    
+import { query as BookQuery, mutation as BookMutation, type as BookType } from "./Book/schema";
+
 export default `
 
-  type QueryResultsMetadata {
-    count: Int
-  }
+type Book {
+  _id: String
+  isbn: String
+  title: String
+  userId: String
+  publisher: String
+  pages: String
+  authors: [String]
+}
 
-  input StringArrayUpdate {
-    index: Int,
-    value: String
-  }
+type Query {
+  allBooks: [Book]
+}
 
-  input IntArrayUpdate {
-    index: Int,
-    value: Int
-  }
-
-  input FloatArrayUpdate {
-    index: Int,
-    value: Float
-  }
-
-  ${BookType}
-
-  type Query {
-    ${BookQuery}
-  }
-
-  type Mutation {
-    ${BookMutation}
-  }
-
-`
+`;

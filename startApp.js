@@ -346,7 +346,7 @@ function error(err) {
 }
 
 Promise.resolve(dao.init()).then(() => {
-  app.listen(process.env.PORT || 3000);
+  app.listen(8080);
   bookEntryQueueManager.initialize();
 });
 
