@@ -209,11 +209,14 @@
         function webSocketAddress(path){
             return 'wss://' + window.location.host + (path || '');
         }
+
+        try {
+          import("./react-redux/public/module/reactStartup.js");
+        } catch(er){
+
+        }
+
     </script>
-    
-    <script type="text/javascript" src="/react-redux/dist/manifest-bundle.js"></script>
-    <script type="text/javascript" src="/react-redux/dist/react-build-bundle.js"></script>
-    <script type="text/javascript" src="/react-redux/dist/main-bundle.js"></script>
 
 </body>
 </html>

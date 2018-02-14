@@ -177,19 +177,19 @@ function loadModule(location) {
   let modulePromise = (() => {
     switch (module.toLowerCase()) {
       case "activate":
-        return import(/* webpackChunkName: "small-modules" */ "./modules/activate/activate");
+        return import("./modules/activate/activate");
       case "authenticate":
-        return import(/* webpackChunkName: "small-modules" */ "./modules/authenticate/authenticate");
+        return import("./modules/authenticate/authenticate");
       case "books":
-        return import(/* webpackChunkName: "books-module" */ "./modules/books/books");
+        return import("./modules/books/books");
       case "home":
-        return import(/* webpackChunkName: "home-module" */ "./modules/home/home");
+        return import("./modules/home/home");
       case "scan":
-        return import(/* webpackChunkName: "scan-module" */ "./modules/scan/scan");
+        return import("./modules/scan/scan");
       case "subjects":
-        return import(/* webpackChunkName: "subject-module" */ "./modules/subjects/subjects");
+        return import("./modules/subjects/subjects");
       case "settings":
-        return import(/* webpackChunkName: "small-modules" */ "./modules/settings/settings");
+        return import("./modules/settings/settings");
     }
   })();
 

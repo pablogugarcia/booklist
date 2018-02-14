@@ -6,7 +6,10 @@
   "scripts": {
     "start": "webpack -w",
     "deploy": "cd .. && npm run deploy",
-    "rollup": "rollup -c rollup.config.js"
+    "rollup": "rollup -c rollup.config.js",
+    "ts": "gulp ts",
+    "tsc": "tsc --outDir FOO *.tsx?",
+    "ntypescript": "ntypescript"
   },
   "dependencies": {
     "@types/react": "15.0.28",
@@ -42,11 +45,15 @@
     "graphql-query-compress": "0.9.6",
     "graphql-request": "1.4.0",
     "graphql-tag": "2.5.0",
+    "gulp": "3.9.1",
+    "gulp-print": "5.0.0",
+    "gulp-typescript": "4.0.1",
     "history": "4.6.1",
     "immutability-helper": "2.2.2",
     "lodash.debounce": "4.0.8",
     "lodash.throttle": "4.1.1",
     "micro-graphql-react": "0.0.8-update1",
+    "ntypescript": "^1.201706190042.1",
     "purify-css": "1.2.2",
     "query-string": "4.3.2",
     "react": "^16.2.0",
@@ -67,6 +74,7 @@
     "redux-thunk": "2.2.0",
     "reselect": "2.0.1",
     "rollup": "0.55.5",
+    "rollup-plugin-alias": "^1.4.0",
     "rollup-plugin-babel": "3.0.3",
     "rollup-plugin-commonjs": "8.3.0",
     "rollup-plugin-json": "2.3.0",
@@ -77,6 +85,7 @@
     "simple-react-bootstrap": "0.2.7",
     "sw-precache-webpack-plugin": "0.11.4",
     "ts-loader": "2.3.0",
+    "tsc": "^1.20150623.0",
     "typescript": "2.4.0",
     "uglify-es": "3.3.9",
     "uglifyjs-webpack-plugin": "1.1.8",
