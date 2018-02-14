@@ -1,5 +1,6 @@
 import typescript from "rollup-plugin-typescript";
 import resolve from "rollup-plugin-node-resolve";
+import json from "rollup-plugin-json";
 import commonjs from "rollup-plugin-commonjs";
 import uglify from "rollup-plugin-uglify-es";
 import babel from "rollup-plugin-babel";
@@ -7,28 +8,37 @@ import babel from "rollup-plugin-babel";
 const production = false; //!process.env.ROLLUP_WATCH;
 
 const plugins = [
+  json({
+    include: "node_modules/**",
+    indent: "  "
+  }),
   resolve(),
   commonjs({
     namedExports: {
-      "node_modules/react/index.js": ["Children", "Component", "createElement"],
-      "node_modules/react-dom/index.js": ["render"]
+      "node_modules/react/index.js": ["Children", "PureComponent", "Component", "createElement"],
+      "node_modules/react-dom/index.js": ["render", "findDOMNode", "unmountComponentAtNode"],
+      "node_modules/react-dnd/lib/index.js": ["DragLayer", "DropTarget", "DragSource", "DragDropContext"]
     }
+  }),
+  typescript({
+    typescript: require("typescript")
   }),
   babel({
     exclude: "node_modules/**",
     presets: ["react"],
-    plugins: ["transform-decorators-legacy", "transform-class-properties", "transform-object-rest-spread"]
+    plugins: ["syntax-dynamic-import", /*"transform-decorators-legacy",*/ "transform-class-properties", "transform-object-rest-spread"]
   })
 ];
 
 export default [
   // ES module version, for modern browsers
   {
-    input: ["./tempRollupEntry.js"],
+    input: ["./reactStartup.ts"],
+    //input: ["./tempRollupEntry.js"],
     output: {
       dir: "public/module",
       format: "es",
-      sourcemap: true
+      sourcemap: false
     },
     experimentalCodeSplitting: true,
     experimentalDynamicImport: true,
@@ -37,11 +47,12 @@ export default [
 
   // SystemJS version, for older browsers
   {
-    input: ["./tempRollupEntry.js"],
+    input: ["./reactStartup.ts"],
+    //input: ["./tempRollupEntry.js"],
     output: {
       dir: "public/nomodule",
       format: "system",
-      sourcemap: true
+      sourcemap: false
     },
     experimentalCodeSplitting: true,
     experimentalDynamicImport: true,
