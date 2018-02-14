@@ -8,3 +8,4 @@ node-dest/
 .esm-cache/
 react-redux/.rpt2_cache/
 react-redux/public/
+react-redux/reactStartup.js
