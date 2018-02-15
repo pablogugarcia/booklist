@@ -5,48 +5,13 @@ import commonjs from "rollup-plugin-commonjs";
 import uglify from "rollup-plugin-uglify-es";
 import babel from "rollup-plugin-babel";
 import alias from "rollup-plugin-alias";
+import includePaths from "rollup-plugin-includepaths";
 
 const production = false; //!process.env.ROLLUP_WATCH;
 
-const appRootFiles = ["renderUI", "rootReducer", "rootReducerActionCreators", "rootReducerActionNames", "store"];
-const appRootComponentFiles = [
-  "bootstrapButton",
-  "colorsPalette",
-  "componentLoading",
-  "customColorPicker",
-  "genericLabelSelect",
-  "header",
-  "labelDisplay",
-  "loading",
-  "mainNavigation",
-  "manualBookEntry"
-];
-const utilFiles = ["ajaxUtil", "graphqlUtil"];
-
-let aliasObj = Object.assign(
-  {},
-  appRootFiles.reduce((obj, file) => ((obj[`applicationRoot/${file}`] = `applicationRoot/${file}.js`), obj), {}),
-  appRootComponentFiles.reduce((obj, file) => ((obj[`applicationRoot/components/${file}`] = `applicationRoot/components/${file}.js`), obj), {}),
-  {
-    reactStartup: "reactStartup.js",
-    jscolor: "util/jsColor.js",
-    "modules/subjects/reducers/reducer": "modules/subjects/reducers/reducer.js",
-    "modules/books/reducers/bookSearch/reducer": "modules/books/reducers/bookSearch/reducer.js",
-    "modules/books/reducers/subjects/reducer": "modules/books/reducers/subjects/reducer.js",
-    "modules/subjects/reducers/actionCreators": "modules/subjects/reducers/actionCreators.js",
-    "modules/books/reducers/books/reducer": "modules/books/reducers/books/reducer.js",
-    "modules/scan/reducers/actionNames": "modules/scan/reducers/actionNames.js",
-    "util/immutableHelpers": "util/immutableHelpers.js",
-    "modules/books/reducers/tags/reducer": "modules/books/reducers/tags/reducer.js",
-    "modules/books/reducers/books/actionCreators": "modules/books/reducers/books/actionCreators.js",
-    "modules/books/reducers/bookSearch/actionCreators": "modules/books/reducers/bookSearch/actionCreators.js",
-    "modules/books/reducers/books/actionNames": "modules/books/reducers/books/actionNames.js"
-  },
-  utilFiles.reduce((obj, file) => ((obj[`util/${file}`] = `util/${file}.js`), obj), {})
-);
-
 const plugins = [
-  alias(aliasObj),
+  alias({ jscolor: "util/jsColor.js" }),
+  includePaths({ paths: ["./"] }),
   json({
     include: "node_modules/**",
     indent: "  "
