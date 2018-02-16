@@ -6,6 +6,7 @@ import uglify from "rollup-plugin-uglify-es";
 import babel from "rollup-plugin-babel";
 import alias from "rollup-plugin-alias";
 import includePaths from "rollup-plugin-includepaths";
+import string from "rollup-plugin-string";
 
 const production = false; //!process.env.ROLLUP_WATCH;
 
@@ -15,6 +16,9 @@ const plugins = [
   json({
     include: "node_modules/**",
     indent: "  "
+  }),
+  string({
+    include: "**/*.htm"
   }),
   resolve(),
   commonjs({

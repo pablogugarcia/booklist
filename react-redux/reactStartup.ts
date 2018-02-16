@@ -6,6 +6,8 @@ import ajaxUtil from "util/ajaxUtil";
 import "react-loadable";
 import "immutability-helper";
 
+import MyHtml from "./junkhtml.htm";
+
 import { Client } from "micro-graphql-react";
 
 export const graphqlClient = new Client({
