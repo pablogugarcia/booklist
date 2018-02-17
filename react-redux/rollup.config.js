@@ -7,6 +7,7 @@ import babel from "rollup-plugin-babel";
 import alias from "rollup-plugin-alias";
 import includePaths from "rollup-plugin-includepaths";
 import string from "rollup-plugin-string";
+import postcss from "rollup-plugin-postcss";
 
 const production = false; //!process.env.ROLLUP_WATCH;
 
@@ -20,16 +21,19 @@ const plugins = [
   string({
     include: "**/*.htm"
   }),
-  resolve(),
-  commonjs({
-    //include: "node_modules/**",
-    //include: "./**"
-    // namedExports: {
-    //   "node_modules/react/index.js": ["Children", "PureComponent", "Component", "createElement"],
-    //   "node_modules/react-dom/index.js": ["render", "findDOMNode", "unmountComponentAtNode"],
-    //   "node_modules/react-dnd/lib/index.js": ["DragLayer", "DropTarget", "DragSource", "DragDropContext"]
-    // }
+  postcss({
+    plugins: []
   }),
+  resolve(),
+  // commonjs({
+  //   //include: "node_modules/**",
+  //   //include: "./**"
+  //   // namedExports: {
+  //   //   "node_modules/react/index.js": ["Children", "PureComponent", "Component", "createElement"],
+  //   //   "node_modules/react-dom/index.js": ["render", "findDOMNode", "unmountComponentAtNode"],
+  //   //   "node_modules/react-dnd/lib/index.js": ["DragLayer", "DropTarget", "DragSource", "DragDropContext"]
+  //   // }
+  // }),
   babel({
     exclude: "node_modules/**",
     presets: ["react"],
