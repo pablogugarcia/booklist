@@ -25,15 +25,15 @@ const plugins = [
     plugins: []
   }),
   resolve(),
-  // commonjs({
-  //   //include: "node_modules/**",
-  //   //include: "./**"
-  //   // namedExports: {
-  //   //   "node_modules/react/index.js": ["Children", "PureComponent", "Component", "createElement"],
-  //   //   "node_modules/react-dom/index.js": ["render", "findDOMNode", "unmountComponentAtNode"],
-  //   //   "node_modules/react-dnd/lib/index.js": ["DragLayer", "DropTarget", "DragSource", "DragDropContext"]
-  //   // }
-  // }),
+  commonjs({
+    //include: "node_modules/**",
+    //include: "./**"
+    // namedExports: {
+    //   "node_modules/react/index.js": ["Children", "PureComponent", "Component", "createElement"],
+    //   "node_modules/react-dom/index.js": ["render", "findDOMNode", "unmountComponentAtNode"],
+    //   "node_modules/react-dnd/lib/index.js": ["DragLayer", "DropTarget", "DragSource", "DragDropContext"]
+    // }
+  }),
   babel({
     exclude: "node_modules/**",
     presets: ["react"],
