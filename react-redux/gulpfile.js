@@ -12,9 +12,5 @@ gulp.task("ts", () => {
     .pipe(tsProject())
     .pipe(gprint(filePath => "TypeScript compiled: " + filePath))
     .pipe(gulp.dest(""))
-    .on("finish", () => {
-      if (!failed) {
-        console.log("\n===================\nTypeScript all good\n===================\n");
-      }
-    });
+    .on("finish", () => {});
 });

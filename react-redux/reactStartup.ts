@@ -10,6 +10,8 @@ import MyHtml from "./junkhtml.htm";
 
 import { Client } from "micro-graphql-react";
 
+export { MyHtml };
+
 export const graphqlClient = new Client({
   endpoint: "/graphql",
   fetchOptions: { credentials: "include" }
