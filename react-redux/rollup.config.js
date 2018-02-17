@@ -22,12 +22,13 @@ const plugins = [
   }),
   resolve(),
   commonjs({
-    include: "node_modules/**",
-    namedExports: {
-      "node_modules/react/index.js": ["Children", "PureComponent", "Component", "createElement"],
-      "node_modules/react-dom/index.js": ["render", "findDOMNode", "unmountComponentAtNode"],
-      "node_modules/react-dnd/lib/index.js": ["DragLayer", "DropTarget", "DragSource", "DragDropContext"]
-    }
+    //include: "node_modules/**",
+    //include: "./**"
+    // namedExports: {
+    //   "node_modules/react/index.js": ["Children", "PureComponent", "Component", "createElement"],
+    //   "node_modules/react-dom/index.js": ["render", "findDOMNode", "unmountComponentAtNode"],
+    //   "node_modules/react-dnd/lib/index.js": ["DragLayer", "DropTarget", "DragSource", "DragDropContext"]
+    // }
   }),
   babel({
     exclude: "node_modules/**",
@@ -39,8 +40,8 @@ const plugins = [
 export default [
   // ES module version, for modern browsers
   {
-    input: ["./reactStartup.js"],
-    //input: ["./tempRollupEntry.js"],
+    //input: ["./reactStartup.js"],
+    input: ["./tempRollupEntry.js"],
     output: {
       dir: "public/module",
       format: "es",
@@ -49,19 +50,19 @@ export default [
     experimentalCodeSplitting: true,
     experimentalDynamicImport: true,
     plugins
-  }
+  },
 
   // SystemJS version, for older browsers
-  // {
-  //   input: ["./reactStartup.js"],
-  //   //input: ["./tempRollupEntry.js"],
-  //   output: {
-  //     dir: "public/nomodule",
-  //     format: "system",
-  //     sourcemap: false
-  //   },
-  //   experimentalCodeSplitting: true,
-  //   experimentalDynamicImport: true,
-  //   plugins
-  // }
+  {
+    //input: ["./reactStartup.js"],
+    input: ["./tempRollupEntry.js"],
+    output: {
+      dir: "public/nomodule",
+      format: "system",
+      sourcemap: false
+    },
+    experimentalCodeSplitting: true,
+    experimentalDynamicImport: true,
+    plugins
+  }
 ];
