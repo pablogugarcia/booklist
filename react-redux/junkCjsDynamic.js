@@ -1,1 +1,3 @@
-module.exports = function junkCjs() {};
+module.exports = function junkCjs() {
+  alert("Hello from cjs");
+};

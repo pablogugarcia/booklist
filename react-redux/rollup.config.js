@@ -7,6 +7,7 @@ import babel from "rollup-plugin-babel";
 import alias from "rollup-plugin-alias";
 import includePaths from "rollup-plugin-includepaths";
 import string from "rollup-plugin-string";
+import postcss from "rollup-plugin-postcss";
 
 const production = false; //!process.env.ROLLUP_WATCH;
 
@@ -19,6 +20,9 @@ const plugins = [
   }),
   string({
     include: "**/*.htm"
+  }),
+  postcss({
+    plugins: []
   }),
   resolve(),
   // commonjs({
