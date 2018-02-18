@@ -94,6 +94,7 @@
     "webpack": "3.3.0"
   },
   "devDependencies": {
+    "systemjs-builder": "^0.16.12",
     "webpack-bundle-analyzer": "2.2.3",
     "webpack-dev-server": "2.5.1"
   }

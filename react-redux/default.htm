@@ -205,17 +205,42 @@
         <button><i class="fa fa-fw fa-spin fa-spinner"></i></button>
     </div>
 
+    <h1>HELLO WORLD</h1>
+
+    <script type="text/javascript" src="react-redux/util/system.js"></script>
     <script>
         function webSocketAddress(path){
             return 'wss://' + window.location.host + (path || '');
         }
+        
+        System.config({
+          bundles: {
+            "public/bundles/buildFile-bundled.js": ["buildFile.js"] 
+          },
+          baseURL: '/react-redux',
+          packages: {
+            '': {
+              defaultExtension: 'js',
+              map: {
+              },
+              meta: {
+              }
+            }
+          }
+        });
+
+        window.x = "buildFile";
+        System.import("public/nomodule/tempRollupEntry");
+        System.import(x).then(() => alert(x + y));
+        
+        //setTimeout(() => alert(x + y), 100);
+        //tempRollupEntry has System.import(x) - buildFile imports some other files that each define x and y on window - buildFile has separately 
+        //been bundled with SystemJS-builder and put in public/bundles/buildFile-bundled.js
 
         try {
-          import("./react-redux/public/module/reactStartup.js");
-        } catch(er){
-
-        }
-
+          //import("./react-redux/public/module/reactStartup.js");
+        } catch(er){ }
+        
     </script>
 
 </body>
