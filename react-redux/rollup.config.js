@@ -8,6 +8,7 @@ import alias from "rollup-plugin-alias";
 import includePaths from "rollup-plugin-includepaths";
 import string from "rollup-plugin-string";
 import postcss from "rollup-plugin-postcss";
+import replace from "rollup-plugin-replace";
 
 const production = false; //!process.env.ROLLUP_WATCH;
 
@@ -24,16 +25,23 @@ const plugins = [
   postcss({
     plugins: []
   }),
-  resolve(),
-  // commonjs({
-  //   //include: "node_modules/**",
-  //   //include: "./**"
-  //   // namedExports: {
-  //   //   "node_modules/react/index.js": ["Children", "PureComponent", "Component", "createElement"],
-  //   //   "node_modules/react-dom/index.js": ["render", "findDOMNode", "unmountComponentAtNode"],
-  //   //   "node_modules/react-dnd/lib/index.js": ["DragLayer", "DropTarget", "DragSource", "DragDropContext"]
-  //   // }
-  // }),
+  replace({
+    "process.env.NODE_ENV": JSON.stringify("production")
+  }),
+  resolve({
+    preferBuiltins: false,
+    browser: true
+  }),
+  commonjs({
+    include: "node_modules/**",
+
+    //include: "./**"
+    namedExports: {
+      "node_modules/react/index.js": ["Children", "PureComponent", "Component", "createElement"],
+      "node_modules/react-dom/index.js": ["render", "findDOMNode", "unmountComponentAtNode"],
+      "node_modules/react-dnd/lib/index.js": ["DragLayer", "DropTarget", "DragSource", "DragDropContext"]
+    }
+  }),
   babel({
     exclude: "node_modules/**",
     presets: ["react"],
@@ -44,8 +52,8 @@ const plugins = [
 export default [
   // ES module version, for modern browsers
   {
-    //input: ["./reactStartup.js"],
-    input: ["./tempRollupEntry.js"],
+    input: ["./reactStartup.js"],
+    //input: ["./tempRollupEntry.js"],
     output: {
       dir: "public/module",
       format: "es",
@@ -58,8 +66,8 @@ export default [
 
   // SystemJS version, for older browsers
   {
-    //input: ["./reactStartup.js"],
-    input: ["./tempRollupEntry.js"],
+    input: ["./reactStartup.js"],
+    //input: ["./tempRollupEntry.js"],
     output: {
       dir: "public/nomodule",
       format: "system",

@@ -205,36 +205,35 @@
         <button><i class="fa fa-fw fa-spin fa-spinner"></i></button>
     </div>
 
-    <h1>HELLO WORLD</h1>
-
-    <script type="text/javascript" src="react-redux/util/system.js"></script>
+    
     <script>
         function webSocketAddress(path){
             return 'wss://' + window.location.host + (path || '');
         }
-        
-        System.config({
-          bundles: {
-            "public/bundles/buildFile-bundled.js": ["buildFile.js"] 
-          },
-          baseURL: '/react-redux',
-          packages: {
-            '': {
-              defaultExtension: 'js',
-              map: {
-              },
-              meta: {
-              }
-            }
-          }
-        });
 
-        window.x = "buildFile";
-        System.import("public/nomodule/tempRollupEntry").then(() => {
-          System.import(x).then(() => {
-            alert(x + y);
-          });
-        });
+        // script type="text/javascript" src="react-redux/util/system.js"
+        // System.config({
+        //   bundles: {
+        //     "public/bundles/buildFile-bundled.js": ["buildFile.js"] 
+        //   },
+        //   baseURL: '/react-redux',
+        //   packages: {
+        //     '': {
+        //       defaultExtension: 'js',
+        //       map: {
+        //       },
+        //       meta: {
+        //       }
+        //     }
+        //   }
+        // });
+
+        // window.x = "buildFile";
+        // System.import("public/nomodule/tempRollupEntry").then(() => {
+        //   System.import(x).then(() => {
+        //     alert(x + y);
+        //   });
+        // });
         //.then(() => alert(x + y));
         
         //setTimeout(() => alert(x + y), 100);
@@ -242,7 +241,7 @@
         //been bundled with SystemJS-builder and put in public/bundles/buildFile-bundled.js
 
         try {
-          //import("./react-redux/public/module/reactStartup.js");
+          import("./react-redux/public/module/reactStartup.js");
         } catch(er){ }
         
     </script>
