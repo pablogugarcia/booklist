@@ -230,8 +230,12 @@
         });
 
         window.x = "buildFile";
-        System.import("public/nomodule/tempRollupEntry");
-        System.import(x).then(() => alert(x + y));
+        System.import("public/nomodule/tempRollupEntry").then(() => {
+          System.import(x).then(() => {
+            alert(x + y);
+          });
+        });
+        //.then(() => alert(x + y));
         
         //setTimeout(() => alert(x + y), 100);
         //tempRollupEntry has System.import(x) - buildFile imports some other files that each define x and y on window - buildFile has separately 
