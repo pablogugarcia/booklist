@@ -8,8 +8,7 @@
     "deploy": "cd .. && npm run deploy",
     "rollup": "rollup -c rollup.config.js",
     "ts": "gulp ts",
-    "tsc": "tsc --outDir FOO *.tsx?",
-    "ntypescript": "ntypescript"
+    "uglify": "gulp uglify"
   },
   "dependencies": {
     "@types/react": "15.0.28",
@@ -48,6 +47,7 @@
     "gulp": "3.9.1",
     "gulp-print": "5.0.0",
     "gulp-typescript": "4.0.1",
+    "gulp-uglify-es": "^1.0.1",
     "history": "4.6.1",
     "immutability-helper": "2.2.2",
     "lodash.debounce": "4.0.8",
