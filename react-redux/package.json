@@ -73,7 +73,7 @@
     "redux": "3.7.2",
     "redux-thunk": "2.2.0",
     "reselect": "2.0.1",
-    "rollup": "^0.56.2",
+    "rollup": "0.56.3",
     "rollup-plugin-alias": "1.4.0",
     "rollup-plugin-babel": "3.0.3",
     "rollup-plugin-commonjs": "8.3.0",
