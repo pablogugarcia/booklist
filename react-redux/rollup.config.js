@@ -22,9 +22,9 @@ const plugins = [
   string({
     include: "**/*.htm"
   }),
-  postcss({
-    plugins: []
-  }),
+  // postcss({
+  //   plugins: []
+  // }),
   replace({
     "process.env.NODE_ENV": JSON.stringify("production")
   }),
