@@ -62,19 +62,19 @@ export default [
     experimentalCodeSplitting: true,
     experimentalDynamicImport: true,
     plugins
-  },
+  }
 
   // SystemJS version, for older browsers
-  {
-    input: ["./reactStartup.js"],
-    //input: ["./tempRollupEntry.js"],
-    output: {
-      dir: "public/nomodule",
-      format: "system",
-      sourcemap: false
-    },
-    experimentalCodeSplitting: true,
-    experimentalDynamicImport: true,
-    plugins
-  }
+  // {
+  //   input: ["./reactStartup.js"],
+  //   //input: ["./tempRollupEntry.js"],
+  //   output: {
+  //     dir: "public/nomodule",
+  //     format: "system",
+  //     sourcemap: false
+  //   },
+  //   experimentalCodeSplitting: true,
+  //   experimentalDynamicImport: true,
+  //   plugins
+  // }
 ];
