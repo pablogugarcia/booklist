@@ -79,7 +79,7 @@ module.exports = {
     //minimize: false
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: "default.htm" }),
+    new HtmlWebpackPlugin({ template: "default.htm", inject: false }),
     new GenerateSW({
       globDirectory: ".",
       globPatterns: [
