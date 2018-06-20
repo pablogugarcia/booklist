@@ -1,0 +1,21 @@
+
+            {"files":{"publicPath":"react-redux/dist/","js":[{"entryName":"main","path":"react-redux/dist/main-bundle.js"}],"css":[]},"options":{"template":"C:\\GIT\\booklist\\react-redux\\node_modules\\html-webpack-plugin\\lib\\loader.js!C:\\GIT\\booklist\\react-redux\\default.htm","templateContent":false,"filename":"index.html","hash":false,"inject":false,"compile":true,"favicon":false,"minify":false,"cache":true,"showErrors":true,"chunks":"all","excludeChunks":[],"chunksSortMode":"auto","meta":{},"title":"Webpack App","xhtml":false}}
+
+        /*
+        <%@ Import Namespace="members" %>
+        <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="app.StartPage" %>
+
+        var app_isDebug = <%=Global.App_IsDebug.ToString().ToLower() %>;
+        var app_isStage = <%=Global.App_IsStage.ToString().ToLower() %>;
+        var app_isUpgrading = <%=Global.App_IsUpgrading.ToString().ToLower() %>;
+        var app_wbEnabled = <%=Global.App_WpEnabled.ToString().ToLower() %>;
+        var app_versionNumber = '<%=Global.App_VersionNumber %>';
+        var app_versionBuild = '<%=Global.App_VersionBuild %>';
+        var app_versionFolder = '<%=Global.App_VersionAndBuildFolder %>';
+        var app_upgradeNotice = '<%=Global.App_UpgradeNotice.ToString().Replace("'", "") %>';
+        var app_apiurl = '<%= BE2.Shared.Helpers.CrEnvironment.GetAppSetting("PublicAppServerUrl") %>';
+        var app_useBundledScripts = <%=ConfigurationManager.AppSettings["UseBundledScripts"].ToString().ToLower() %>;
+        var app_reporturl = '<%=ConfigurationManager.AppSettings["AppServerReportUrl"] %>';
+        var app_gmapsembed = '<%=ConfigurationManager.AppSettings["GoogleMapsEmbedApi"] %>';
+
+        */

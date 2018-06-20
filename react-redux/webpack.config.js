@@ -72,6 +72,29 @@ module.exports = {
             path: path.resolve(__dirname, "extracted_queries.json")
           }
         }
+      },
+      {
+        test: /\.hbs$/,
+        use: {
+          loader: "handlebars-loader",
+          options: {
+            helperDirs: ["handlebarsHelpers"],
+            handlebarsLoader: {
+              partialResolver: (partial, callback) => {
+                console.log("PARTIAL", partial);
+              }
+            },
+            handlebarsLoader: {
+              helperResolver: (helper, callback) => {
+                console.log("HELPER", helper);
+                // should pass the helper's path on disk
+                // to the callback if one was found for the given parameter.
+                // Callback accepts (err, locationOnDisk)
+                // Otherwise just call the callback without any arguments
+              }
+            }
+          }
+        }
       }
     ]
   },
@@ -79,7 +102,7 @@ module.exports = {
     //minimize: false
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: "default.htm", inject: false }),
+    new HtmlWebpackPlugin({ template: "default.hbs", inject: false }),
     new GenerateSW({
       globDirectory: ".",
       globPatterns: [
@@ -108,6 +131,7 @@ module.exports = {
       importScripts: ["react-redux/sw-manual.js"]
     }),
     //new BundleAnalyzerPlugin({ analyzerMode: "static" }),
-    isProd ? new MinifyPlugin() : null
+    isProd ? new MinifyPlugin() : null,
+    new HtmlWebpackPlugin({ template: "default.hbs", inject: false })
   ].filter(p => p)
 };
