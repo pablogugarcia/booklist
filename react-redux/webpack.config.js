@@ -89,8 +89,8 @@ module.exports = {
     ]
   },
   optimization: {
-    minimizer: isProd ? [new TerserPlugin()] : []
-    //minimize: false
+    //minimizer: isProd ? [new TerserPlugin()] : []
+    minimize: false
   },
   plugins: [
     new HtmlWebpackPlugin({ template: "default.htm" }),
