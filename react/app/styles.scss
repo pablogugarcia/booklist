@@ -1,0 +1,11 @@
+$paneColor: pink;
+$paneSpanColor: purple;
+
+.pane {
+  background-color: $paneColor;
+  max-width: 300px;
+}
+
+.pane span {
+  color: $paneSpanColor;
+}

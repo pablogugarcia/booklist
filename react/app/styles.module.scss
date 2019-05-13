@@ -1,0 +1,9 @@
+$listStyleType: armenian;
+
+.list {
+  margin-left: 20px;
+}
+
+.list-item {
+  list-style-type: $listStyleType;
+}
