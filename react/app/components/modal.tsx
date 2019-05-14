@@ -22,6 +22,36 @@ export class StandardModalHeader extends Component<{ onHide: any; caption: any }
   }
 }
 
+export const LazyModal = props => {
+  let { Component, isOpen, onHide, focusRef = null, style = { maxWidth: "600px" }, children } = props;
+
+  return (
+    <Transition
+      config={{ ...config.gentle, overshootClamping: true }}
+      from={{ opacity: 0, y: -10 }}
+      enter={{ opacity: 1, y: 0 }}
+      leave={{ opacity: 0, y: 10 }}
+    >
+      {isOpen
+        ? (styles: any) => (
+            <DialogOverlay initialFocusRef={focusRef} onDismiss={onHide} isOpen={isOpen} style={{ opacity: styles.opacity }}>
+              <DialogContent
+                style={{
+                  transform: `translate3d(0px, ${styles.y}px, 0px)`,
+                  border: "4px solid hsla(0, 0%, 0%, 0.5)",
+                  borderRadius: 10,
+                  ...style
+                }}
+              >
+                <Component {...props} />
+              </DialogContent>
+            </DialogOverlay>
+          )
+        : null}
+    </Transition>
+  );
+};
+
 type ModalTypes = { isOpen: boolean; style?: any; onHide: any; headerCaption?: any; className?: string; focusRef?: any };
 export default class Modal extends Component<ModalTypes, any> {
   render() {

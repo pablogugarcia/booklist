@@ -16,6 +16,7 @@ import { BooksContext, useBooks } from "./booksState";
 import { BookSearchState, useBooksSearchState, useBookSearchUiView } from "./booksSearchState";
 
 import GridView from "./components/bookViews/gridList";
+import { LazyModal } from "app/components/modal";
 const BasicListView = lazy(() => import(/* webpackChunkName: "basic-view-list" */ "./components/bookViews/basicList"));
 const CoversView = lazy(() => import(/* webpackChunkName: "basic-view-list" */ "./components/bookViews/coversList"));
 
@@ -198,7 +199,7 @@ const BookViewingList: SFC<{}> = props => {
 
         {subjectEditModalLoaded ? <SubjectEditModal editModalOpen={subjectEditModalOpen} stopEditing={stopEditingSubjects} /> : null}
         {tagEditModalLoaded ? <TagEditModal editModalOpen={tagEditModalOpen} onDone={stopEditingTags} /> : null}
-        {editingFiltersLoaded ? <BookSearchModal isOpen={editingFilters} onHide={endEditFilters} /> : null}
+        <LazyModal Component={BookSearchModal} headerCaption="Full search" isOpen={editingFilters} onHide={endEditFilters} />
       </Suspense>
     </>
   );

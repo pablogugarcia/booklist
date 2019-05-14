@@ -72,7 +72,7 @@ const BookSearchModal: FunctionComponent<LocalProps> = props => {
   let { isOpen, onHide } = props;
 
   return (
-    <Modal {...{ isOpen, onHide, headerCaption: "Full search" }}>
+    <>
       <form onSubmit={updateFilters}>
         <div className="row">
           <div className="col-sm-6 col-xs-12">
@@ -193,7 +193,7 @@ const BookSearchModal: FunctionComponent<LocalProps> = props => {
           Close
         </BootstrapButton>
       </div>
-    </Modal>
+    </>
   );
 };
 
