@@ -10,7 +10,7 @@ const uiSettings = { isTouch, isDesktop: false, showingDesktop: false, isMobile:
 const { logged_in, userId } = isLoggedIn();
 const authSettings = logged_in && userId ? { isLoggedIn: true, userId } : { isLoggedIn: false, userId: "" };
 
-if (window.screen.width < 700) {
+if (true || window.screen.width < 700) {
   Object.assign(uiSettings, { isDesktop: false, showingDesktop: false, isMobile: true, showingMobile: true });
 } else {
   Object.assign(uiSettings, { isDesktop: true, showingDesktop: true, isMobile: false, showingMobile: false });
@@ -35,6 +35,7 @@ export const SET_THEME = "root.SET_THEME";
 const initialState = {
   ...uiSettings,
   ...authSettings,
+  x: 1,
   publicUserId: "",
   publicName: "",
   publicBooksHeader: "",
@@ -67,6 +68,8 @@ function appReducer(state: AppState, action): AppState {
       return { ...state, online: true };
     case SET_THEME:
       return { ...state, colorTheme: action.theme };
+    case "SET_X":
+      return { ...state, x: action.val };
   }
 
   return state;
@@ -82,9 +85,14 @@ const setDeviceOverride = view => {
   } catch (e) {}
 };
 
-const requestDesktop = () => dispatch => {
+const setX = val => dispatch => {
+  dispatch({ type: "SET_X", val });
+};
+
+const requestDesktop = () => (dispatch, getState) => {
   setDeviceOverride("desktop");
   dispatch({ type: REQUEST_DESKTOP });
+  (window as any).__set_x(getState().x + 5);
 };
 
 const requestMobile = () => dispatch => {
@@ -100,14 +108,20 @@ const isOnline = () => ({ type: IS_ONLINE });
 const isOffline = () => ({ type: IS_OFFLINE });
 
 export function useAppState(): [AppState, any, any] {
-  let actions = { requestDesktop, requestMobile, setModule, newLogin, isOffline, isOnline, setPublicInfo };
+  let actions = { requestDesktop, requestMobile, setModule, newLogin, isOffline, isOnline, setPublicInfo, setX };
   let result = getStatePacket<AppState>(appReducer, initialState, actions);
+
+  (window as any).__set_x = result[1].setX;
 
   let colorTheme = result[0].colorTheme;
   useEffect(() => {
     localStorageManager.set("color-theme", colorTheme);
     document.body.className = colorTheme;
   }, [colorTheme]);
+
+  useEffect(() => {
+    alert(result[0].x);
+  }, [result[0].x]);
 
   return result;
 }
