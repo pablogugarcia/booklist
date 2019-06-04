@@ -38,14 +38,50 @@ function scanReducer(state, [type, payload]) {
   return state;
 }
 
-const BookEntryList: FunctionComponent<{}> = () => {
+//
+
+const initialState = {
+  x: 1,
+  y: 2,
+  z: 3,
+  str: "Hello"
+};
+
+const staggeredIncrementX = (dispatch: (packet: actions) => any, first, second) => {
+  dispatch(["SET_X", first]);
+  setTimeout(() => {
+    dispatch(["SET_X", second]);
+  }, 1000);
+};
+
+type actions = ["SET_X", number] | ["SET_Y", number] | ["SET_Z", number] | ["SET_STR", string];
+function myReducer(state, [type, payload]: actions): typeof initialState {
+  switch (type) {
+    case "SET_X":
+      return { ...state, x: payload };
+    case "SET_Y":
+      return { ...state, y: payload };
+    case "SET_Z":
+      return { ...state, z: payload };
+    case "SET_STR":
+      return { ...state, str: payload };
+  }
+}
+
+const Widget: FunctionComponent<{}> = () => {
+  const [state, dispatch] = useReducer(myReducer, initialState);
+
+  dispatch(["SET_X", 2]);
+  state.x++;
+  staggeredIncrementX(dispatch, 3, 4);
+
   let inputRefs = [] as any;
   for (let i = 0; i < 10; i++) {
     inputRefs.push(useRef(null));
   }
   const [showIncomingQueue, setShowIncomingQueue] = useState(false);
   const [showScanInstructions, setShowScanInstructions] = useState(false);
-  const [{ pending, booksSaved: booksJustSaved }, dispatch] = useReducer(scanReducer, { pending: 0, booksSaved: [] });
+  const [{ pending, booksSaved: booksJustSaved }, dispatch23] = useReducer(scanReducer, { pending: 0, booksSaved: [] });
 
   let ws: any = null;
 
@@ -225,4 +261,4 @@ const BookEntryList: FunctionComponent<{}> = () => {
   );
 };
 
-export default BookEntryList;
+export default Widget;
