@@ -164,41 +164,15 @@ function fetchPublicUserInfo(userId) {
   });
 }
 
-// export type QueryOfAlias<T extends Record<string, keyof Query>> = { [k in keyof T]: Query[T[k]] };
+type EitherQueryType<T> = [T] extends [keyof Query] ? keyof Query : [T] extends [Record<string, keyof Query>] ? Record<string, keyof Query> : never;
 
-// export type QueryOfAll<T extends Record<string, keyof Query> | keyof Query> = { [k in keyof Query]: T[k] extends never ? any : never };
-
-export type QueryOfOld<T extends keyof Query> = Pick<Query, T>;
-
-type X = { a: string } | { b: number };
-let aa: X = { a: "df", b: 123 };
-
-export type BasicQuery<T extends keyof Query> = Pick<Query, T>;
-export type AliasQuery<T extends Record<string, keyof Query>> = { [k in keyof T]: Query[T[k]] };
-export type CombinedQuery<T extends keyof Query, U extends Record<string, keyof Query>> = BasicQuery<T> & AliasQuery<U>;
-
-const justTesting1 = useQuery<BasicQuery<"allBooks" | "allSubjects">>(null);
-const { data: data1 } = justTesting1;
-data1.allSubjects;
-
-const justTesting2 = useQuery<AliasQuery<{ sub: "allSubjects"; sub2: "allSubjects" }>>(null);
-const { data: data2 } = justTesting2;
-data2.sub2;
-
-const justTesting3 = useQuery<CombinedQuery<"allBooks" | "allLabelColors", { sub: "allSubjects"; sub2: "allSubjects" }>>(null);
-const { data: data3 } = justTesting3;
-data3.sub;
-data3.allBooks;
-
-type GetIt<T> = T extends never
-  ? {}
-  : T extends keyof Query
+type GetQueryType<T> = [T] extends [keyof Query]
   ? Pick<Query, T>
-  : T extends Record<string, keyof Query>
+  : [T] extends [Record<string, keyof Query>]
   ? { [k in keyof T]: Query[T[k]] }
   : never;
-export type MasterQuery<T extends keyof Query | Record<string, keyof Query>, U extends keyof Query | Record<string, keyof Query> = never> = GetIt<T> &
-  GetIt<U>;
+
+export type MasterQuery<T extends EitherQueryType<T>, U extends EitherQueryType<U> = never> = GetQueryType<T> & GetQueryType<U>;
 
 const justTesting1a = useQuery<MasterQuery<"allBooks" | "allSubjects">>(null);
 const { data: data1a } = justTesting1a;
@@ -212,3 +186,13 @@ const justTesting3a = useQuery<MasterQuery<"allBooks" | "allLabelColors", { sub:
 const { data: data3a } = justTesting3a;
 data3a.sub;
 data3a.allBooks;
+
+const justTesting4a = useQuery<MasterQuery<{ sub: "allSubjects"; sub2: "allSubjects" }, "allBooks" | "allLabelColors">>(null);
+const { data: data4a } = justTesting3a;
+data4a.sub;
+data4a.allBooks;
+
+//                                                               This should be a compile error
+const justTestingMakeThisNotWork = useQuery<MasterQuery<{ sub: "allSubjects" } | "allBooks" | "allSubjects">>(null);
+const { data: dataX } = justTestingMakeThisNotWork;
+dataX.allSubjects;
