@@ -16,8 +16,8 @@ import setupServiceWorker from "./util/setupServiceWorker";
 import { isLoggedIn, isAdmin } from "util/loginStatus";
 import { graphqlClient } from "util/graphql";
 import { AppState } from "app/appState";
-import { Query } from "graphql-typings";
-import { useQuery } from "micro-graphql-react";
+import { Query, Mutation } from "graphql-typings";
+import { useQuery, useMutation } from "micro-graphql-react";
 
 setupServiceWorker();
 
@@ -164,35 +164,69 @@ function fetchPublicUserInfo(userId) {
   });
 }
 
-type EitherQueryType<T> = [T] extends [keyof Query] ? keyof Query : [T] extends [Record<string, keyof Query>] ? Record<string, keyof Query> : never;
-
-type GetQueryType<T> = [T] extends [keyof Query]
-  ? Pick<Query, T>
-  : [T] extends [Record<string, keyof Query>]
-  ? { [k in keyof T]: Query[T[k]] }
+type EitherType<T, QueryOrMutation> = [T] extends [keyof QueryOrMutation]
+  ? keyof QueryOrMutation
+  : [T] extends [Record<string, keyof QueryOrMutation>]
+  ? Record<string, keyof QueryOrMutation>
   : never;
 
-export type MasterQuery<T extends EitherQueryType<T>, U extends EitherQueryType<U> = never> = GetQueryType<T> & GetQueryType<U>;
+type GetType<T, QueryOrMutation> = [T] extends [keyof QueryOrMutation]
+  ? Pick<QueryOrMutation, T>
+  : [T] extends [Record<string, keyof QueryOrMutation>]
+  ? { [k in keyof T]: QueryOrMutation[T[k]] }
+  : never;
 
-const justTesting1a = useQuery<MasterQuery<"allBooks" | "allSubjects">>(null);
-const { data: data1a } = justTesting1a;
+export type QueryOf<T extends EitherType<T, Query>, U extends EitherType<U, Query> = never> = GetType<T, Query> & GetType<U, Query>;
+export type MutationOf<T extends EitherType<T, Mutation>, U extends EitherType<U, Mutation> = never> = GetType<T, Mutation> & GetType<U, Mutation>;
+
+const { data: data1a } = useQuery<QueryOf<"allBooks" | "allSubjects">>(null);
 data1a.allSubjects;
 
-const justTesting2a = useQuery<MasterQuery<{ sub: "allSubjects"; sub2: "allSubjects" }>>(null);
-const { data: data2a } = justTesting2a;
+let a = useMutation<MutationOf<"updateBook" | "updateTags">>(null);
+a.runMutation({}).then(x => {
+  x.updateBook.Book;
+  x.updateTags.Meta;
+});
+
+const { data: data2a } = useQuery<QueryOf<{ sub: "allSubjects"; sub2: "allSubjects" }>>(null);
 data2a.sub2;
 
-const justTesting3a = useQuery<MasterQuery<"allBooks" | "allLabelColors", { sub: "allSubjects"; sub2: "allSubjects" }>>(null);
-const { data: data3a } = justTesting3a;
-data3a.sub;
-data3a.allBooks;
+let b = useMutation<MutationOf<{ ub: "updateBook"; ut: "updateTags" }>>(null);
+b.runMutation({}).then(x => {
+  x.ub.Book;
+  x.ut.Meta;
+});
 
-const justTesting4a = useQuery<MasterQuery<{ sub: "allSubjects"; sub2: "allSubjects" }, "allBooks" | "allLabelColors">>(null);
-const { data: data4a } = justTesting3a;
+const { data: data3a } = useQuery<QueryOf<"allBooks" | "allLabelColors", { sub: "allSubjects"; sub2: "allSubjects" }>>(null);
+data3a.sub.Subjects;
+data3a.allBooks.Books;
+
+let c = useMutation<MutationOf<"updateBooksBulk" | "updateSubject", { ub: "updateBook"; ut: "updateTags" }>>(null);
+c.runMutation({}).then(x => {
+  x.updateBooksBulk.success;
+  x.ub.Book;
+  x.ut.Meta;
+});
+
+const { data: data4a } = useQuery<QueryOf<{ sub: "allSubjects"; sub2: "allSubjects" }, "allBooks" | "allLabelColors">>(null);
 data4a.sub;
 data4a.allBooks;
 
+let d = useMutation<MutationOf<{ ub: "updateBook"; ut: "updateTags" }, "updateBooksBulk" | "updateSubject">>(null);
+d.runMutation({}).then(x => {
+  x.updateBooksBulk.success;
+  x.ub.Book;
+  x.ut.Meta;
+});
+
 //                                                               This should be a compile error
-const justTestingMakeThisNotWork = useQuery<MasterQuery<{ sub: "allSubjects" } | "allBooks" | "allSubjects">>(null);
-const { data: dataX } = justTestingMakeThisNotWork;
+const { data: dataX } = useQuery<QueryOf<{ sub: "allSubjects" } | "allBooks" | "allSubjects">>(null);
 dataX.allSubjects;
+
+//                                                               This should be a compile error
+let e = useMutation<MutationOf<{ ub: "updateBook"; ut: "updateTags" } | "updateBooksBulk" | "updateSubject">>(null);
+e.runMutation({}).then(x => {
+  x.updateBooksBulk.success;
+  x.ub.Book;
+  x.ut.Meta;
+});
