@@ -16,6 +16,8 @@ import setupServiceWorker from "./util/setupServiceWorker";
 import { isLoggedIn, isAdmin } from "util/loginStatus";
 import { graphqlClient } from "util/graphql";
 import { AppState } from "app/appState";
+import { Query } from "graphql-typings";
+import { useQuery } from "micro-graphql-react";
 
 setupServiceWorker();
 
@@ -161,3 +163,52 @@ function fetchPublicUserInfo(userId) {
     });
   });
 }
+
+// export type QueryOfAlias<T extends Record<string, keyof Query>> = { [k in keyof T]: Query[T[k]] };
+
+// export type QueryOfAll<T extends Record<string, keyof Query> | keyof Query> = { [k in keyof Query]: T[k] extends never ? any : never };
+
+export type QueryOfOld<T extends keyof Query> = Pick<Query, T>;
+
+type X = { a: string } | { b: number };
+let aa: X = { a: "df", b: 123 };
+
+export type BasicQuery<T extends keyof Query> = Pick<Query, T>;
+export type AliasQuery<T extends Record<string, keyof Query>> = { [k in keyof T]: Query[T[k]] };
+export type CombinedQuery<T extends keyof Query, U extends Record<string, keyof Query>> = BasicQuery<T> & AliasQuery<U>;
+
+const justTesting1 = useQuery<BasicQuery<"allBooks" | "allSubjects">>(null);
+const { data: data1 } = justTesting1;
+data1.allSubjects;
+
+const justTesting2 = useQuery<AliasQuery<{ sub: "allSubjects"; sub2: "allSubjects" }>>(null);
+const { data: data2 } = justTesting2;
+data2.sub2;
+
+const justTesting3 = useQuery<CombinedQuery<"allBooks" | "allLabelColors", { sub: "allSubjects"; sub2: "allSubjects" }>>(null);
+const { data: data3 } = justTesting3;
+data3.sub;
+data3.allBooks;
+
+type GetIt<T> = T extends never
+  ? {}
+  : T extends keyof Query
+  ? Pick<Query, T>
+  : T extends Record<string, keyof Query>
+  ? { [k in keyof T]: Query[T[k]] }
+  : never;
+export type MasterQuery<T extends keyof Query | Record<string, keyof Query>, U extends keyof Query | Record<string, keyof Query> = never> = GetIt<T> &
+  GetIt<U>;
+
+const justTesting1a = useQuery<MasterQuery<"allBooks" | "allSubjects">>(null);
+const { data: data1a } = justTesting1a;
+data1a.allSubjects;
+
+const justTesting2a = useQuery<MasterQuery<{ sub: "allSubjects"; sub2: "allSubjects" }>>(null);
+const { data: data2a } = justTesting2a;
+data2a.sub2;
+
+const justTesting3a = useQuery<MasterQuery<"allBooks" | "allLabelColors", { sub: "allSubjects"; sub2: "allSubjects" }>>(null);
+const { data: data3a } = justTesting3a;
+data3a.sub;
+data3a.allBooks;
