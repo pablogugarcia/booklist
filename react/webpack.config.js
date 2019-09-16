@@ -106,8 +106,8 @@ module.exports = {
         getCache({ pattern: /^https:\/\/mylibrary\.io\/graphql\?.+cache%22:9/, name: "max-cache" }),
         getCache({ pattern: /^https:\/\/s3.amazonaws.com\/my-library-cover-uploads/, name: "local-images1" }),
         getCache({ pattern: /^https:\/\/my-library-cover-uploads.s3.amazonaws.com/, name: "local-images2" })
-      ],
-      importScripts: ["react/sw-manual/sw-index-bundle.js"]
+      ]
+      //importScripts: ["react/sw-manual/sw-index-bundle.js"]
     })
     //new BundleAnalyzerPlugin({ analyzerMode: "static" }),
   ].filter(p => p),
