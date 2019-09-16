@@ -95,7 +95,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({ template: "default.htm" }),
     new MiniCssExtractPlugin({ filename: isProd ? "[name]-[contenthash].css" : "[name].css" }),
-    //new GenerateSW({
+    new GenerateSW({
       //ignoreUrlParametersMatching: [/./],
       //exclude: [/\.(ttf|eot|svg|woff)$/],
       //navigateFallback: "react/dist/index.html",
@@ -108,7 +108,7 @@ module.exports = {
       //   getCache({ pattern: /^https:\/\/my-library-cover-uploads.s3.amazonaws.com/, name: "local-images2" })
       // ]
       //importScripts: ["react/sw-manual/sw-index-bundle.js"]
-    //})
+    })
     //new BundleAnalyzerPlugin({ analyzerMode: "static" }),
   ].filter(p => p),
   stats: {
