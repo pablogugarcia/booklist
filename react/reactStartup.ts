@@ -17,7 +17,7 @@ import { isLoggedIn, isAdmin } from "util/loginStatus";
 import { graphqlClient } from "util/graphql";
 import { AppState } from "app/appState";
 
-setupServiceWorker();
+setTimeout(setupServiceWorker, 1000);
 
 let currentModule;
 let publicUserCache = {};
