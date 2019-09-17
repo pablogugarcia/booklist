@@ -96,7 +96,7 @@ module.exports = {
     new HtmlWebpackPlugin({ template: "default.htm" }),
     new MiniCssExtractPlugin({ filename: isProd ? "[name]-[contenthash].css" : "[name].css" }),
     new GenerateSW({
-      chunks: ["XYZ"]
+      chunks: ["home-module", "scan-module", "settings-module"]
       //ignoreUrlParametersMatching: [/./],
       //exclude: [/\.(ttf|eot|svg|woff)$/],
       //navigateFallback: "react/dist/index.html",
