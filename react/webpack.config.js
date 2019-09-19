@@ -89,7 +89,7 @@ module.exports = {
     ]
   },
   optimization: {
-    minimizer: isProd ? [new TerserPlugin()] : []
+    minimizer: isProd ? [new TerserPlugin()] : [],
     minimize: false
   },
   plugins: [
