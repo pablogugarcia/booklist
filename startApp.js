@@ -216,6 +216,9 @@ app.get("/admin", browseToReactRedux);
 app.get("/styledemo", browseToReactRedux);
 app.get("/react", browseToReactRedux);
 app.get("/jr", browseToReactRedux);
+app.get("/service-worker.js", (request, response) => {
+  response.sendFile(path.join(__dirname + "/react/dist/service-worker.js"));
+});
 
 function browseToReactRedux(request, response) {
   if (!!request.user) {
