@@ -14,6 +14,8 @@ import allTags from "../../graphQL/tags/getTags.graphql";
 import allLabelColors from "../../graphQL/misc/allLabelColors.graphql";
 import offlineUpdateSync from "../../graphQL/misc/offlineUpdateSync.graphql";
 
+import { registerRoute } from "workbox-routing/registerRoute";
+
 self.addEventListener("message", event => {
   if (event.data == "sw-update-accepted") {
     self.skipWaiting().then(() => {
@@ -38,7 +40,7 @@ self.addEventListener("message", evt => {
 
 self.addEventListener("activate", masterSync);
 
-workbox.routing.registerRoute(
+registerRoute(
   /graphql/,
   ({ url, event }) => {
     return fetch(event.request).catch(err => {
@@ -58,7 +60,7 @@ workbox.routing.registerRoute(
   "GET"
 );
 
-workbox.routing.registerRoute(
+registerRoute(
   /graphql$/,
   ({ url, event }) => {
     let request = event.request.clone();
@@ -78,7 +80,7 @@ workbox.routing.registerRoute(
 
 function masterSync() {
   let open = indexedDB.open("books", 1);
-  
+
   open.onsuccess = async evt => {
     const syncEvery = 1500 * 10; // 10 seconds
     let db = open.result;

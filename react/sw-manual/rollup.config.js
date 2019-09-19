@@ -3,9 +3,10 @@ const minify = require("rollup-plugin-babel-minify");
 const path = require("path");
 
 module.exports = {
+  external: ['workbox-routing'],
   input: "./src/index.js",
   output: {
-    format: "iife",
+    format: "es",
     file: "./sw-index-bundle.js"
   },
   plugins: [/*minify({}),*/ graphqlPlugin({ path: path.resolve(__dirname, "../extracted_queries.json") })]
