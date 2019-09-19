@@ -76,11 +76,11 @@ workbox.routing.registerRoute(
   "POST"
 );
 
-const syncEvery = 1500 * 10; // 10 seconds
 function masterSync() {
   let open = indexedDB.open("books", 1);
-
+  
   open.onsuccess = async evt => {
+    const syncEvery = 1500 * 10; // 10 seconds
     let db = open.result;
     if (db.objectStoreNames.contains("syncInfo")) {
       let [syncInfo = {}] = await readTable("syncInfo");
