@@ -218,7 +218,7 @@ app.get("/jr", browseToReactRedux);
 app.get("/service-worker.js", (request, response) => {
   response.sendFile(path.join(__dirname + "/react/dist/service-worker.js"));
 });
-app.use("/*.js", express.static(__dirname + "/react/dist/"));
+app.get("/*.js", express.static(__dirname + "/react/dist/"));
 
 function browseToReactRedux(request, response) {
   if (!!request.user) {
