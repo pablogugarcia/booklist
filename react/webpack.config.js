@@ -10,7 +10,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 const getCache = ({ name, pattern, expires, maxEntries }) => ({
   urlPattern: pattern,
-  handler: "cacheFirst",
+  handler: "CacheFirst",
   options: {
     matchOptions: {
       ignoreVary: true
@@ -89,14 +89,14 @@ module.exports = {
     ]
   },
   optimization: {
-    minimizer: isProd ? [new TerserPlugin()] : []
-    //minimize: false
+    minimizer: isProd ? [new TerserPlugin()] : [],
+    minimize: false
   },
   plugins: [
     new HtmlWebpackPlugin({ template: "default.htm" }),
     new MiniCssExtractPlugin({ filename: isProd ? "[name]-[contenthash].css" : "[name].css" }),
     new GenerateSW({
-      ignoreUrlParametersMatching: [/./],
+      ignoreURLParametersMatching: [/./],
       exclude: [/\.(ttf|eot|svg|woff)$/],
       navigateFallback: "react/dist/index.html",
       navigateFallbackBlacklist: [/\/activate\b/],
@@ -107,7 +107,7 @@ module.exports = {
         getCache({ pattern: /^https:\/\/s3.amazonaws.com\/my-library-cover-uploads/, name: "local-images1" }),
         getCache({ pattern: /^https:\/\/my-library-cover-uploads.s3.amazonaws.com/, name: "local-images2" })
       ],
-      importScripts: ["react/sw-manual/sw-index-bundle.js"]
+      //importScripts: ["react/sw-manual/sw-index-bundle.js"]
     })
     //new BundleAnalyzerPlugin({ analyzerMode: "static" }),
   ].filter(p => p),
