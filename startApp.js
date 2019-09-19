@@ -191,6 +191,7 @@ app.use("/node_modules/", express.static(__dirname + "/node_modules/"));
 app.use("/react/", express.static(__dirname + "/react/"));
 app.use("/utils/", express.static(__dirname + "/utils/"));
 app.use("/uploads/", express.static(__dirname + "/uploads/"));
+app.use("/*.js", express.static(__dirname + "/react/dist/"));
 
 app.ws("/bookEntryWS", function(ws, req) {
   bookEntryQueueManager.subscriberAdded(req.user.id, ws);
@@ -215,9 +216,6 @@ app.get("/admin", browseToReactRedux);
 app.get("/styledemo", browseToReactRedux);
 app.get("/react", browseToReactRedux);
 app.get("/jr", browseToReactRedux);
-app.get("/service-worker.js", (request, response) => {
-  response.sendFile(path.join(__dirname + "/react/dist/service-worker.js"));
-});
 
 function browseToReactRedux(request, response) {
   if (!!request.user) {
