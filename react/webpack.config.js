@@ -2,11 +2,14 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPl
 const { GenerateSW } = require("workbox-webpack-plugin");
 const MinifyPlugin = require("babel-minify-webpack-plugin");
 const path = require("path");
-const isProd = process.env.NODE_ENV == "production";
+const isProd = true; //process.env.NODE_ENV == "production";
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const WebpackOnBuildPlugin = require('on-build-webpack');
 
 const TerserPlugin = require("terser-webpack-plugin");
+
+const fs = require("fs");
 
 const getCache = ({ name, pattern, expires, maxEntries }) => ({
   urlPattern: pattern,
@@ -95,20 +98,24 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({ template: "default.htm" }),
     new MiniCssExtractPlugin({ filename: isProd ? "[name]-[contenthash].css" : "[name].css" }),
-    new GenerateSW({
-      ignoreURLParametersMatching: [/./],
-      exclude: [/\.(ttf|eot|svg|woff)$/],
-      navigateFallback: "react/dist/index.html",
-      navigateFallbackBlacklist: [/\/activate\b/],
-      runtimeCaching: [
-        getCache({ pattern: /^https:\/\/mylibrary\.io\/graphql\?.+cache%22:1/, name: "short-cache", expires: 60 * 5 }), //5 minutes
-        getCache({ pattern: /^https:\/\/mylibrary\.io\/graphql\?.+cache%22:5/, name: "medium-cache", expires: 60 * 60 * 24 }), //1 day
-        getCache({ pattern: /^https:\/\/mylibrary\.io\/graphql\?.+cache%22:9/, name: "max-cache" }),
-        getCache({ pattern: /^https:\/\/s3.amazonaws.com\/my-library-cover-uploads/, name: "local-images1" }),
-        getCache({ pattern: /^https:\/\/my-library-cover-uploads.s3.amazonaws.com/, name: "local-images2" })
-      ],
-      mode: "development"
-      //importScripts: ["react/sw-manual/sw-index-bundle.js"]
+    // new GenerateSW({
+    //   ignoreURLParametersMatching: [/./],
+    //   exclude: [/\.(ttf|eot|svg|woff)$/],
+    //   navigateFallback: "react/dist/index.html",
+    //   navigateFallbackBlacklist: [/\/activate\b/],
+    //   runtimeCaching: [
+    //     getCache({ pattern: /^https:\/\/mylibrary\.io\/graphql\?.+cache%22:1/, name: "short-cache", expires: 60 * 5 }), //5 minutes
+    //     getCache({ pattern: /^https:\/\/mylibrary\.io\/graphql\?.+cache%22:5/, name: "medium-cache", expires: 60 * 60 * 24 }), //1 day
+    //     getCache({ pattern: /^https:\/\/mylibrary\.io\/graphql\?.+cache%22:9/, name: "max-cache" }),
+    //     getCache({ pattern: /^https:\/\/s3.amazonaws.com\/my-library-cover-uploads/, name: "local-images1" }),
+    //     getCache({ pattern: /^https:\/\/my-library-cover-uploads.s3.amazonaws.com/, name: "local-images2" })
+    //   ],
+    //   mode: "development",
+    //   inlineWorkboxRuntime: true
+    //   //importScripts: ["react/sw-manual/sw-index-bundle.js"]
+    // }),
+    new WebpackOnBuildPlugin(function(stats) {
+      fs.copyFileSync("./util/service-worker.js", "./dist/service-worker.js")
     })
     //new BundleAnalyzerPlugin({ analyzerMode: "static" }),
   ].filter(p => p),
