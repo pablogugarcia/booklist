@@ -4118,10 +4118,13 @@ const precachePlugins = {
 const installListener = event => {
   const precacheController = getOrCreatePrecacheController();
   const plugins = precachePlugins.get();
-  event.waitUntil(precacheController.install({
+  debugger;
+  let X = precacheController.install({
     event,
     plugins
-  }).catch(error => {
+  });
+
+  event.waitUntil(X.catch(error => {
     {
       console.log("SW Error from hell is:", error);
       debugger;
