@@ -53,7 +53,7 @@ export type LookupHashType = {
   [str: string]: TagOrSubject;
 };
 
-const defaultSearchValuesHash = {
+export const defaultSearchValuesHash = {
   search: "",
   subjects: "",
   tags: "",

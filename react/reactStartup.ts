@@ -3,7 +3,7 @@ import "@reach/dialog/styles.css";
 import "./site-styles.scss";
 
 import { renderUI } from "app/renderUI";
-import { createElement } from "react";
+import React, { createElement } from "react";
 import queryString from "query-string";
 import getPublicUser from "graphQL/getPublicUser.graphql";
 
@@ -38,7 +38,10 @@ export const getModulePromise = moduleToLoad => {
     case "authenticate":
       return import(/* webpackChunkName: "small-modules" */ "./modules/authenticate/authenticate");
     case "books":
-      return import(/* webpackChunkName: "books-module" */ "./modules/books/books");
+      return Promise.all([
+        import(/* webpackChunkName: "books-module" */ "./modules/books/books"),
+        import(/* webpackChunkName: "books-module-resource" */ "./modules/books/booksResource")
+      ]).then(([{ default: Comp }, { default: makeResource }]) => ({ default: Comp, resource: makeResource() }));
     case "home":
       return import(/* webpackChunkName: "home-module" */ "./modules/home/home");
     case "scan":
@@ -111,7 +114,7 @@ export function loadCurrentModule(app: AppState, { setModule, setPublicInfo }) {
   let modulePromise = getModulePromise(moduleToLoad);
 
   Promise.all([modulePromise, publicUserPromise])
-    .then(([{ default: ModuleComponent }, publicUserInfo]: [any, any]) => {
+    .then(([{ default: ModuleComponent, resource = null }, publicUserInfo]: [any, any]) => {
       if (currentModule != moduleToLoad) return;
 
       setModule(currentModule);
@@ -119,7 +122,7 @@ export function loadCurrentModule(app: AppState, { setModule, setPublicInfo }) {
       if (publicUserInfo) {
         setPublicInfo({ ...publicUserInfo, userId });
       }
-      renderUI(createElement(ModuleComponent));
+      renderUI(createElement(ModuleComponent, { resource }));
     })
     .catch(() => {});
 }

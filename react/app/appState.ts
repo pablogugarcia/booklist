@@ -46,6 +46,10 @@ const initialState = {
 
 export type AppState = typeof initialState;
 
+let currentAppState = {} as AppState;
+export const updateAppState = state => (currentAppState = state);
+export const getAppState = () => currentAppState;
+
 function appReducer(state: AppState, action): AppState {
   switch (action.type) {
     case SET_PUBLIC_INFO:

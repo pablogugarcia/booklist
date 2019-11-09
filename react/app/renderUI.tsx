@@ -1,7 +1,7 @@
-import React, { createContext, useContext, FunctionComponent, useEffect } from "react";
-import { render } from "react-dom";
+import React, { createContext, useContext, FunctionComponent, useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import MainNavigationBar from "app/components/mainNavigation";
-import { useAppState, AppState } from "./appState";
+import { useAppState, AppState, updateAppState } from "./appState";
 import { useColors } from "./colorsState";
 import { SubjectState, useSubjectsState } from "./subjectsState";
 import { history, loadCurrentModule } from "reactStartup";
@@ -35,21 +35,19 @@ const WellUiSwitcher: FunctionComponent<{}> = props => {
   );
 };
 
-export function clearUI() {
-  render(<div />, document.getElementById("home"));
-}
-
-export function renderUI(component = null) {
-  render(<App component={component} />, document.getElementById("home"));
+const root = (ReactDOM as any).createRoot(document.getElementById("home"));
+export function renderUI(Component = null) {
+  root.render(<App component={Component} />);
 }
 
 export const AppContext = createContext<[AppState, any, any]>(null);
 export const ColorsContext = createContext<any>(null);
 export const SubjectsContext = createContext<SubjectState>(null);
 
-const App = ({ component = null } = {}) => {
+const App = ({ component = null } = {} as any) => {
   let appStatePacket = useAppState();
   let [appState, appActions] = appStatePacket;
+  updateAppState(appState);
 
   let subjectsPacket = useSubjectsState(appState);
   const colorsPacket = useColors(appStatePacket);
@@ -75,6 +73,7 @@ const App = ({ component = null } = {}) => {
 
             <div id="main-content" style={{ flex: 1, overflowY: "auto" }}>
               {component}
+
               <div style={{ visibility: "hidden" }}>
                 <button>
                   <i className="fa fa-fw fa-spin fa-spinner" />

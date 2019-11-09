@@ -20,6 +20,7 @@ import UpdateBookMutation from "graphQL/books/updateBook.graphql";
 import UpdateBooksReadMutation from "graphQL/books/updateBooksRead.graphql";
 import DeleteBookMutation from "graphQL/books/deleteBook.graphql";
 import { MutationOf, Mutations } from "graphql-typings";
+import { SubjectsContext } from "app/renderUI";
 
 const CreateBookModal = LazyModal(() => import(/* webpackChunkName: "book-view-edit-modals" */ "app/components/editBook/editModal"));
 const BookSubjectSetter = LazyModal(() => import(/* webpackChunkName: "book-list-modals" */ "./components/bookSubjectSetter"));
@@ -37,19 +38,22 @@ const prepBookForSaving = book => {
 };
 
 export const BooksSearchContext = createContext<[BookSearchState, any, any]>(null);
+export const BooksResourceContext = createContext<any>(null);
 
-export default () => {
+export default props => {
   let booksSearchState = useBooksSearchState();
   let tagsState = useTagsState();
 
   return (
     <div style={{}}>
       <Suspense fallback={<Loading />}>
-        <BooksSearchContext.Provider value={booksSearchState}>
-          <TagsContext.Provider value={tagsState}>
-            <BooksContexHolder />
-          </TagsContext.Provider>
-        </BooksSearchContext.Provider>
+        <BooksResourceContext.Provider value={props.resource}>
+          <BooksSearchContext.Provider value={booksSearchState}>
+            <TagsContext.Provider value={tagsState}>
+              <BooksContexHolder />
+            </TagsContext.Provider>
+          </BooksSearchContext.Provider>
+        </BooksResourceContext.Provider>
       </Suspense>
     </div>
   );
@@ -96,6 +100,12 @@ function booksUiStateReducer(state, [action, payload = null]) {
 
 const BookViewingList: SFC<{}> = props => {
   const { books, booksLoading, booksLoaded, currentQuery } = useContext(BooksContext);
+  let { subjectsLoaded } = useContext(SubjectsContext);
+  let booksResource = useContext(BooksResourceContext);
+
+  booksResource.read();
+
+  let { tagsLoaded } = useContext(TagsContext);
 
   const [booksUiState, dispatchBooksUiState] = useReducer(booksUiStateReducer, initialBooksState);
   useLayoutEffect(() => dispatchBooksUiState(["reset"]), [currentQuery]);
@@ -153,7 +163,7 @@ const BookViewingList: SFC<{}> = props => {
           {...{ booksUiState, setRead }}
         />
         <div style={{ flex: 1, padding: 0, minHeight: 450 }}>
-          {!books.length && !booksLoading && booksLoaded ? (
+          {!books.length && !booksLoading && booksLoaded && tagsLoaded && subjectsLoaded ? (
             <div className="alert alert-warning" style={{ marginTop: "20px", marginRight: "5px" }}>
               No books found
             </div>
