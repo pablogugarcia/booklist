@@ -40,8 +40,8 @@ export const getModulePromise = moduleToLoad => {
     case "books":
       return Promise.all([
         import(/* webpackChunkName: "books-module" */ "./modules/books/books"),
-        import(/* webpackChunkName: "books-module-resource" */ "./modules/books/booksResource")
-      ]).then(([{ default: Comp }, { default: makeResource }]) => ({ default: Comp, resource: makeResource() }));
+        import(/* webpackChunkName: "books-module-resource" */ "./modules/books/booksResource").then(({ default: makeRes }) => makeRes())
+      ]).then(([{ default: Component }, resource]) => ({ default: Component, resource }));
     case "home":
       return import(/* webpackChunkName: "home-module" */ "./modules/home/home");
     case "scan":

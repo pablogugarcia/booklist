@@ -103,7 +103,7 @@ const BookViewingList: SFC<{}> = props => {
   let { subjectsLoaded } = useContext(SubjectsContext);
   let booksResource = useContext(BooksResourceContext);
 
-  booksResource.read();
+  let res = booksResource.read();
 
   let { tagsLoaded } = useContext(TagsContext);
 

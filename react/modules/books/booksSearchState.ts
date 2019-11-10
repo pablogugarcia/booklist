@@ -87,6 +87,14 @@ export function useBooksSearchState(): [BookSearchState, any, any] {
   return result;
 }
 
+export function filtersFromUrl(filters) {
+  const { subjects: subjectsHashValue, tags: tagsHashValue } = filters;
+  return Object.assign({}, defaultSearchValuesHash, filters, {
+    tagIds: tagsHashValue ? tagsHashValue.split("-") : [],
+    subjectIds: subjectsHashValue ? subjectsHashValue.split("-") : []
+  });
+}
+
 export const useSelectedSubjects = () => {
   const [{ hashFilters }] = useContext(BooksSearchContext);
   const { subjects } = hashFilters;
@@ -120,14 +128,12 @@ export const useCurrentSearch = () => {
   const tags = useSelectedTags();
 
   return useMemo(() => {
-    let result = Object.assign({}, defaultSearchValuesHash, filters, {
+    let result = Object.assign({}, filtersFromUrl(filters), {
       selectedSubjects: subjects,
-      selectedTags: tags,
-      tagIds: tagsHashValue ? tagsHashValue.split("-") : [],
-      subjectIds: subjectsHashValue ? subjectsHashValue.split("-") : []
+      selectedTags: tags
     });
 
-    return Object.assign(result, {
+    return Object.assign({}, result, {
       anyActiveFilters: !!Object.keys(filters).filter(keyIsFilter).length,
       activeFilterCount: Object.keys(filters).filter(keyIsFilter).length,
       bindableSortValue: `${result.sort}|${result.sortDirection}`

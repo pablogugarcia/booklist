@@ -10,7 +10,6 @@ import { syncResults, clearCache, syncDeletes } from "util/graphqlHelpers";
 import delve from "dlv";
 import { TagsContext } from "app/tagsState";
 import { QueryOf, Queries } from "graphql-typings";
-import { getAppState } from "app/appState";
 
 interface IEditorialReview {
   content: string;
@@ -62,10 +61,8 @@ graphqlClient.subscribeMutation({ when: /createBook/, run: () => clearCache(GetB
 window.addEventListener("book-scanned", () => graphqlClient.getCache(GetBooksQuery).clearCache());
 
 export const useBooks = () => {
-  const app = getAppState();
   const searchState = useCurrentSearch();
-
-  const variables = getBookSearchVariables(searchState, app.publicUserId);
+  const variables = getBookSearchVariables(searchState);
   const onBooksMutation = [
     {
       when: /updateBooks?/,
@@ -108,7 +105,7 @@ export const useBooks = () => {
   };
 };
 
-export function computeBookSearchVariables(bookSearchFilters, publicUserId) {
+export function computeBookSearchVariables(bookSearchFilters) {
   let getBooksVariables: any = {
     page: +bookSearchFilters.page,
     pageSize: bookSearchFilters.pageSize,
@@ -121,7 +118,7 @@ export function computeBookSearchVariables(bookSearchFilters, publicUserId) {
     tags_containsAny: bookSearchFilters.tagIds.length ? bookSearchFilters.tagIds : void 0,
     authors_textContains: bookSearchFilters.author || void 0,
     publisher_contains: bookSearchFilters.publisher || void 0,
-    publicUserId: publicUserId,
+    publicUserId: bookSearchFilters.userId || void 0,
     subjects_count: bookSearchFilters.noSubjects ? 0 : void 0
   };
 
@@ -132,8 +129,8 @@ export function computeBookSearchVariables(bookSearchFilters, publicUserId) {
   return getBooksVariables;
 }
 
-function getBookSearchVariables(bookSearchFilters, publicUserId) {
-  return useMemo(() => computeBookSearchVariables(bookSearchFilters, publicUserId), [bookSearchFilters, publicUserId]);
+function getBookSearchVariables(bookSearchFilters) {
+  return useMemo(() => computeBookSearchVariables(bookSearchFilters), [bookSearchFilters]);
 }
 
 export const BooksContext = createContext<ReturnType<typeof useBooks>>(null);
