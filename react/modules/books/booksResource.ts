@@ -4,5 +4,5 @@ import { bookSearchVariablesFromCurrentUrl } from "./booksState";
 
 export default function preload() {
   let variables = bookSearchVariablesFromCurrentUrl();
-  //graphqlClient.preload(GetBooksQuery, variables);
+  graphqlClient.preload(GetBooksQuery, variables);
 }
