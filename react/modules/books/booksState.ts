@@ -1,15 +1,16 @@
 import { graphqlClient } from "util/graphql";
 
 import GetBooksQuery from "graphQL/books/getBooks.graphql";
-import { useCurrentSearch } from "./booksSearchState";
+import { useCurrentSearch, filtersFromUrl } from "./booksSearchState";
 import { useMemo, useContext, createContext } from "react";
 import { SubjectsContext } from "app/renderUI";
-import { useQuery, buildQuery } from "micro-graphql-react";
+import { useQuery, useSuspenseQuery, buildQuery } from "micro-graphql-react";
 import { syncResults, clearCache, syncDeletes } from "util/graphqlHelpers";
 
 import delve from "dlv";
 import { TagsContext } from "app/tagsState";
 import { QueryOf, Queries } from "graphql-typings";
+import { getCurrentHistoryState } from "reactStartup";
 
 interface IEditorialReview {
   content: string;
@@ -56,13 +57,16 @@ export interface IBookDisplay extends IBookRaw {
   dateAddedDisplay: string;
 }
 
-graphqlClient.subscribeMutation({ when: /createBook/, run: () => clearCache(GetBooksQuery) });
+graphqlClient.subscribeMutation({
+  when: /createBook/,
+  run: () => clearCache(GetBooksQuery)
+});
 
 window.addEventListener("book-scanned", () => graphqlClient.getCache(GetBooksQuery).clearCache());
 
 export const useBooks = () => {
   const searchState = useCurrentSearch();
-  const variables = getBookSearchVariables(searchState);
+  const variables = useMemo(() => computeBookSearchVariables(searchState), [searchState]);
   const onBooksMutation = [
     {
       when: /updateBooks?/,
@@ -105,11 +109,17 @@ export const useBooks = () => {
   };
 };
 
+export function bookSearchVariablesFromCurrentUrl() {
+  return computeBookSearchVariables(filtersFromUrl(getCurrentHistoryState().searchState));
+}
+
 export function computeBookSearchVariables(bookSearchFilters) {
   let getBooksVariables: any = {
     page: +bookSearchFilters.page,
     pageSize: bookSearchFilters.pageSize,
-    sort: { [bookSearchFilters.sort]: bookSearchFilters.sortDirection == "asc" ? 1 : -1 },
+    sort: {
+      [bookSearchFilters.sort]: bookSearchFilters.sortDirection == "asc" ? 1 : -1
+    },
     title_contains: bookSearchFilters.search || void 0,
     isRead: bookSearchFilters.isRead === "1" ? true : void 0,
     isRead_ne: bookSearchFilters.isRead === "0" ? true : void 0,
@@ -127,10 +137,6 @@ export function computeBookSearchVariables(bookSearchFilters) {
   }
 
   return getBooksVariables;
-}
-
-function getBookSearchVariables(bookSearchFilters) {
-  return useMemo(() => computeBookSearchVariables(bookSearchFilters), [bookSearchFilters]);
 }
 
 export const BooksContext = createContext<ReturnType<typeof useBooks>>(null);

@@ -16,6 +16,7 @@ import setupServiceWorker from "./util/setupServiceWorker";
 import { isLoggedIn, isAdmin } from "util/loginStatus";
 import { graphqlClient } from "util/graphql";
 import { AppState } from "app/appState";
+import booksPreload from "./modules/books/booksResource";
 
 setupServiceWorker();
 
@@ -38,10 +39,16 @@ export const getModulePromise = moduleToLoad => {
     case "authenticate":
       return import(/* webpackChunkName: "small-modules" */ "./modules/authenticate/authenticate");
     case "books":
+      /*
       return Promise.all([
-        import(/* webpackChunkName: "books-module" */ "./modules/books/books"),
-        import(/* webpackChunkName: "books-module-resource" */ "./modules/books/booksResource").then(({ default: makeRes }) => makeRes())
+        import(/* webpackChunkName: "books-module" * / "./modules/books/books"),
+        import(/* webpackChunkName: "books-module-resource" * / "./modules/books/booksResource").then(({ default: preload }) => preload())
       ]).then(([{ default: Component }, resource]) => ({ default: Component, resource }));
+
+      */
+
+      booksPreload();
+      return import(/* webpackChunkName: "books-module" */ "./modules/books/books");
     case "home":
       return import(/* webpackChunkName: "home-module" */ "./modules/home/home");
     case "scan":
