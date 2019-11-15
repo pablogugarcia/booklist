@@ -18,6 +18,8 @@ import { graphqlClient } from "util/graphql";
 import { AppState } from "app/appState";
 import booksPreload from "./modules/books/booksResource";
 
+//const preloadPromise = () => import(/* webpackChunkName: "preload" */ "./modules/books/booksResource");
+
 setupServiceWorker();
 
 let currentModule;

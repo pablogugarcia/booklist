@@ -12,7 +12,7 @@ import {
   quickSearch as quickTitleSearch,
   setPage
 } from "../booksSearchState";
-import { BooksContext } from "../booksState";
+import { BooksContext, useBooksCount } from "../booksState";
 import { BooksSearchContext } from "../books";
 import { AppContext } from "app/renderUI";
 
@@ -35,7 +35,8 @@ const BooksMenuBar: SFC<IAddedMenuProps> = props => {
   const quickSearchEl = useRef(null);
 
   const [appState] = useContext(AppContext);
-  const { totalPages, resultsCount } = useContext(BooksContext);
+  const { totalPages, resultsCount, loading } = useBooksCount();
+
   const [{}, { setViewDesktop, setViewBasicList, setCoversList }] = useContext(BooksSearchContext);
 
   const { booksUiState, setRead } = props;
@@ -111,8 +112,10 @@ const BooksMenuBar: SFC<IAddedMenuProps> = props => {
               <span style={{ display: "inline" }}>
                 <span className="hidden-xs">Page</span> {page}
                 <span> of {totalPages}</span>
+
               </span>
             ) : null}
+            
             <div className="btn-group">
               <button onClick={pageUp} disabled={!canPageUp} className="btn btn-default" style={{ marginLeft: "5px" }}>
                 <i className="fal fa-angle-right" />
@@ -213,6 +216,7 @@ const BooksMenuBar: SFC<IAddedMenuProps> = props => {
             {online && resultsCount ? (
               <div style={{ flex: "0 0 auto", marginRight: "5px", alignSelf: "center" }}>
                 {resultsDisplay}
+                {loading ? <span>Loading ...</span> : null}
               </div>
             ) : null}
 
