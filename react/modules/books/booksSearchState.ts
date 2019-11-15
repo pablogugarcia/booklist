@@ -2,13 +2,16 @@ import shallowEqual from "shallow-equal/objects";
 
 import { setSearchValues, getCurrentHistoryState, history } from "reactStartup";
 import { getStatePacket } from "util/stateManagementHelpers";
-import { useContext, useMemo, useEffect } from "react";
+import React, { useContext, useMemo, useEffect } from "react";
+const useTransition = (React as any).useTransition;
+
 import { SubjectsContext, AppContext } from "app/renderUI";
 import { BooksSearchContext } from "./books";
 import { TagsContext } from "app/tagsState";
 
 import localStorage from "util/localStorage";
 import { defaultSearchValuesHash, filtersFromUrl } from "./preloadHelpers";
+import preload from "./booksResource";
 
 const SET_GRID_VIEW = "booksSearch.SET_GRID_VIEW";
 const SET_BASIC_LIST_VIEW = "booksSearch.SET_BasicList_VIEW";
@@ -55,6 +58,12 @@ export type LookupHashType = {
 };
 
 export function useBooksSearchState(): [BookSearchState, any, any] {
+  let [startTransition, isPending] = useTransition({
+    timeoutMs: 3000
+  });
+
+  console.log("isPending = ", isPending);
+
   let actions = { setViewDesktop, setViewBasicList, setCoversList, hashChanged };
   let initialSearchState = useMemo(() => ({ ...initialState, hashFilters: getCurrentHistoryState().searchState }), []);
   let result = getStatePacket<BookSearchState>(bookSearchReducer, initialSearchState, actions);
@@ -62,10 +71,13 @@ export function useBooksSearchState(): [BookSearchState, any, any] {
 
   useEffect(() => {
     return history.listen(() => {
-      const { searchState } = getCurrentHistoryState();
-      dispatch(hashChanged(searchState));
+      startTransition(() => {
+        preload(); //preload before updating!
+        const { searchState } = getCurrentHistoryState();
+        dispatch(hashChanged(searchState));
+      });
     });
-  }, []);
+  }, [startTransition, dispatch, hashChanged]);
 
   return result;
 }

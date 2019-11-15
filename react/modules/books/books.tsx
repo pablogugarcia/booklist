@@ -39,12 +39,12 @@ const prepBookForSaving = book => {
 
 export const BooksSearchContext = createContext<[BookSearchState, any, any]>(null);
 
-export default props => {
+export default () => {
   let booksSearchState = useBooksSearchState();
   let tagsState = useTagsState();
 
   return (
-    <div style={{}}>
+    <div>
       <Suspense fallback={<h1>Loading, yo</h1>}>
         <BooksSearchContext.Provider value={booksSearchState}>
           <TagsContext.Provider value={tagsState}>

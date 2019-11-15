@@ -49,7 +49,7 @@ export const getModulePromise = moduleToLoad => {
 
       */
 
-      booksPreload();
+      //booksPreload();
       return import(/* webpackChunkName: "books-module" */ "./modules/books/books");
     case "home":
       return import(/* webpackChunkName: "home-module" */ "./modules/home/home");
