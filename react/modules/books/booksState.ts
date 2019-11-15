@@ -81,7 +81,7 @@ export const useBooks = () => {
       }
     }
   ];
-  const { data, loading, loaded, currentQuery } = useQuery<QueryOf<Queries["allBooks"]>>(
+  const { data, loading, loaded, currentQuery } = useSuspenseQuery<QueryOf<Queries["allBooks"]>>(
     buildQuery(GetBooksQuery, variables, { onMutation: onBooksMutation })
   );
 
@@ -120,7 +120,7 @@ export const useBooksCount = () => {
       }
     }
   ];
-  const { data, loading, loaded, currentQuery } = useQuery<QueryOf<Queries["allBooks"]>>(
+  const { data, loading, loaded, currentQuery } = useSuspenseQuery<QueryOf<Queries["allBooks"]>>(
     buildQuery(GetBooksCountQuery, variables, { onMutation: onBooksMutation })
   );
 
