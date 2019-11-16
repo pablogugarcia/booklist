@@ -40,18 +40,23 @@ const prepBookForSaving = book => {
 export const BooksSearchContext = createContext<[BookSearchState, any, any]>(null);
 
 export default () => {
+  return (
+    <Suspense fallback={<h1>Loading, yo</h1>}>
+      <MainBookModule />
+    </Suspense>
+  );
+};
+const MainBookModule = () => {
   let booksSearchState = useBooksSearchState();
   let tagsState = useTagsState();
 
   return (
     <div>
-      <Suspense fallback={<h1>Loading, yo</h1>}>
-        <BooksSearchContext.Provider value={booksSearchState}>
-          <TagsContext.Provider value={tagsState}>
-            <BooksContexHolder />
-          </TagsContext.Provider>
-        </BooksSearchContext.Provider>
-      </Suspense>
+      <BooksSearchContext.Provider value={booksSearchState}>
+        <TagsContext.Provider value={tagsState}>
+          <BooksContexHolder />
+        </TagsContext.Provider>
+      </BooksSearchContext.Provider>
     </div>
   );
 };

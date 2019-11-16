@@ -2,8 +2,10 @@ import shallowEqual from "shallow-equal/objects";
 
 import { setSearchValues, getCurrentHistoryState, history } from "reactStartup";
 import { getStatePacket } from "util/stateManagementHelpers";
-import React, { useContext, useMemo, useEffect } from "react";
+import React, { useContext, useMemo, useEffect, useLayoutEffect } from "react";
 const useTransition = (React as any).useTransition;
+
+import { unstable_runWithPriority, unstable_UserBlockingPriority } from "scheduler";
 
 import { SubjectsContext, AppContext } from "app/renderUI";
 import { BooksSearchContext } from "./books";
@@ -71,13 +73,15 @@ export function useBooksSearchState(): [BookSearchState, any, any] {
 
   useEffect(() => {
     return history.listen(() => {
-      startTransition(() => {
-        preload(); //preload before updating!
-        const { searchState } = getCurrentHistoryState();
-        dispatch(hashChanged(searchState));
+      unstable_runWithPriority(unstable_UserBlockingPriority, () => {
+        startTransition(() => {
+          preload(); //preload before updating!
+          const { searchState } = getCurrentHistoryState();
+          dispatch(hashChanged(searchState));
+        });
       });
     });
-  }, [startTransition, dispatch, hashChanged]);
+  }, []);
 
   return result;
 }
