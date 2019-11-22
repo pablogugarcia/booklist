@@ -66,61 +66,26 @@ const BooksContexHolder = () => {
   );
 };
 
-const initialBooksState = {
-  selectedBooks: {},
-  savingReadForBooks: {},
-  pendingDelete: {},
-  deleting: {}
-};
+const initialBooksState = { selectedBooks: {}, savingReadForBooks: {}, pendingDelete: {}, deleting: {} };
 
 const keysToHash = (_ids, value) => (Array.isArray(_ids) ? _ids : [_ids]).reduce((o, _id) => ((o[_id] = value), o), {});
 
 function booksUiStateReducer(state, [action, payload = null]) {
   switch (action) {
     case "select":
-      return {
-        ...state,
-        selectedBooks: { ...state.selectedBooks, ...keysToHash(payload, true) }
-      };
+      return { ...state, selectedBooks: { ...state.selectedBooks, ...keysToHash(payload, true) } };
     case "de-select":
-      return {
-        ...state,
-        selectedBooks: { ...state.selectedBooks, ...keysToHash(payload, false) }
-      };
+      return { ...state, selectedBooks: { ...state.selectedBooks, ...keysToHash(payload, false) } };
     case "toggle-select":
-      return {
-        ...state,
-        selectedBooks: {
-          ...state.selectedBooks,
-          [payload]: !state.selectedBooks[payload]
-        }
-      };
+      return { ...state, selectedBooks: { ...state.selectedBooks, [payload]: !state.selectedBooks[payload] } };
     case "read-saving":
-      return {
-        ...state,
-        savingReadForBooks: {
-          ...state.savingReadForBooks,
-          ...keysToHash(payload, true)
-        }
-      };
+      return { ...state, savingReadForBooks: { ...state.savingReadForBooks, ...keysToHash(payload, true) } };
     case "read-saved":
-      return {
-        ...state,
-        savingReadForBooks: {
-          ...state.savingReadForBooks,
-          ...keysToHash(payload, false)
-        }
-      };
+      return { ...state, savingReadForBooks: { ...state.savingReadForBooks, ...keysToHash(payload, false) } };
     case "start-delete":
-      return {
-        ...state,
-        pendingDelete: { ...state.pendingDelete, ...keysToHash(payload, true) }
-      };
+      return { ...state, pendingDelete: { ...state.pendingDelete, ...keysToHash(payload, true) } };
     case "cancel-delete":
-      return {
-        ...state,
-        pendingDelete: { ...state.pendingDelete, ...keysToHash(payload, false) }
-      };
+      return { ...state, pendingDelete: { ...state.pendingDelete, ...keysToHash(payload, false) } };
     case "delete":
       return { ...state, deleting: { ...state.deleting, [payload]: true } };
     case "reset":
@@ -199,13 +164,7 @@ const BookViewingList: SFC<{}> = props => {
 
           {uiView.isGridView ? (
             <GridView
-              {...{
-                editBook,
-                setRead,
-                booksUiState,
-                dispatchBooksUiState,
-                runDelete
-              }}
+              {...{ editBook, setRead, booksUiState, dispatchBooksUiState, runDelete }}
               editBooksTags={editTagsForBook}
               editBooksSubjects={editSubjectsForBook}
             />
