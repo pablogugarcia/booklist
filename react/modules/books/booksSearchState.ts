@@ -61,7 +61,7 @@ export type LookupHashType = {
 
 export function useBooksSearchState(): [BookSearchState, any, any] {
   let [startTransition, isPending] = useTransition({
-    timeoutMs: 3000
+    timeoutMs: 1000
   });
 
   console.log("isPending = ", isPending);
@@ -73,13 +73,13 @@ export function useBooksSearchState(): [BookSearchState, any, any] {
 
   useEffect(() => {
     return history.listen(() => {
-      unstable_runWithPriority(unstable_UserBlockingPriority, () => {
-        startTransition(() => {
-          preload(); //preload before updating!
-          const { searchState } = getCurrentHistoryState();
-          dispatch(hashChanged(searchState));
-        });
+      // unstable_runWithPriority(unstable_UserBlockingPriority, () => {
+      startTransition(() => {
+        preload(); //preload before updating!
+        const { searchState } = getCurrentHistoryState();
+        dispatch(hashChanged(searchState));
       });
+      // });
     });
   }, []);
 
