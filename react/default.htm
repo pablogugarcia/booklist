@@ -10,6 +10,16 @@
           window.fetch = unfetch;
         };
       }
+
+      class SettingsBaseElement extends HTMLElement {
+        constructor() {
+          super();
+        }
+        createdCallback() {
+          alert("ayyyy 2");
+        }
+      }
+      document.registerElement("my-bullshit-wc", SettingsBaseElement);
     </script>
 
     <meta charset="UTF-8" />
@@ -26,6 +36,9 @@
       <i class="fa fa-fw fa-save"></i>
     </span>
     <div id="home"></div>
+    <template>
+      <my-bullshit-wc />
+    </template>
 
     <script>
       function webSocketAddress(path) {
