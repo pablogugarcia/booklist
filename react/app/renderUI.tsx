@@ -35,9 +35,9 @@ const WellUiSwitcher: FunctionComponent<{}> = props => {
   );
 };
 
-const root = (ReactDOM as any).createRoot(document.getElementById("home"));
+//const root = (ReactDOM as any).createRoot(document.getElementById("home"));
 export function renderUI(Component = null) {
-  root.render(<App component={Component} />);
+  (ReactDOM as any).render(<App component={Component} />, document.getElementById("home"));
 }
 
 export const AppContext = createContext<[AppState, any, any]>(null);

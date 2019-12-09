@@ -16,7 +16,7 @@
           super();
         }
         createdCallback() {
-          alert("ayyyy 2");
+          //alert("ayyyy 2");
         }
       }
       document.registerElement("my-bullshit-wc", SettingsBaseElement);
@@ -35,10 +35,13 @@
       <i class="fa fa-fw fa-arrows"></i> <i class="fa fa-fw fa-pencil"></i> <i class="fa fa-fw fa-plus"></i><i class="fa fa-fw fa-trash"></i>
       <i class="fa fa-fw fa-save"></i>
     </span>
-    <div id="home"></div>
-    <template>
-      <my-bullshit-wc />
-    </template>
+    <div style="display: none" id="home"></div>
+    <my-bullshit-wc>
+      <br />
+      <br />
+      <h1>Hello</h1>
+      <h2>World</h2>
+    </my-bullshit-wc>
 
     <script>
       function webSocketAddress(path) {

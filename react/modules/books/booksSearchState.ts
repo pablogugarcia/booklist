@@ -3,7 +3,7 @@ import shallowEqual from "shallow-equal/objects";
 import { setSearchValues, getCurrentHistoryState, history } from "reactStartup";
 import { getStatePacket } from "util/stateManagementHelpers";
 import React, { useContext, useMemo, useEffect, useLayoutEffect } from "react";
-const useTransition = (React as any).useTransition;
+//const useTransition = (React as any).useTransition;
 
 import { unstable_runWithPriority, unstable_UserBlockingPriority } from "scheduler";
 
@@ -60,11 +60,11 @@ export type LookupHashType = {
 };
 
 export function useBooksSearchState(): [BookSearchState, any, any] {
-  let [startTransition, isPending] = useTransition({
-    timeoutMs: 1000
-  });
+  // let [startTransition, isPending] = useTransition({
+  //   timeoutMs: 1000
+  // });
 
-  console.log("isPending = ", isPending);
+  //console.log("isPending = ", isPending);
 
   let actions = { setViewDesktop, setViewBasicList, setCoversList, hashChanged };
   let initialSearchState = useMemo(() => ({ ...initialState, hashFilters: getCurrentHistoryState().searchState }), []);
@@ -74,11 +74,11 @@ export function useBooksSearchState(): [BookSearchState, any, any] {
   useEffect(() => {
     return history.listen(() => {
       // unstable_runWithPriority(unstable_UserBlockingPriority, () => {
-      startTransition(() => {
+      //startTransition(() => {
         preload(); //preload before updating!
         const { searchState } = getCurrentHistoryState();
         dispatch(hashChanged(searchState));
-      });
+      //});
       // });
     });
   }, []);
